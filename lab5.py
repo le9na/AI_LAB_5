@@ -6,6 +6,7 @@ class BFS:
         self.N = size  # number of vertices in the graph
         self.G = [[False] * self.N for _ in range(self.N)]  # adjacency matrix
         self.Acc = [False] * self.N  # visited nodes
+        self.parent = [-1] * self.N  # to store the parent of each node
         self.Q = deque()  # queue for BFS
         self.setup_graph(size)
         print("+--------------------------------------+")
@@ -42,6 +43,7 @@ class BFS:
                 print("+--------------------------------------+")
                 print(f"\nThe goal {self.ret_city(goal)} is reached\n\n")
                 print("+--------------------------------------+")
+                self.print_path(start, goal)  # print the path
                 return
 
             print("+--------------------------------------+")
@@ -54,6 +56,7 @@ class BFS:
                     self.Q.append(i)
                     add_to_queue += f"{self.ret_city(i)} "
                     self.Acc[i] = True
+                    self.parent[i] = at  # set the parent of this node
 
             add_to_queue += "] are added to the queue"
             print(add_to_queue)
@@ -62,6 +65,15 @@ class BFS:
             for i in self.Q:
                 print(f" {self.ret_city(i)} ", end="")
             print()
+
+    def print_path(self, start, goal):
+        path = []
+        current = goal
+        while current != -1:
+            path.append(self.ret_city(current))
+            current = self.parent[current]
+        path.reverse()  # reverse the path to get the correct order
+        print("Path from start to goal: " + " ".join(path))
 
     @staticmethod
     def ret_city(i):
